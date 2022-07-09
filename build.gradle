@@ -1,1 +1,35 @@
 version = "0.1.0"
+
+ext {
+    TARGET_VERSION = "0.1.0"
+    TARGET_URL = "https://github.com/kazurayam/kazurayam-vba-lib/raw/${TARGET_VERSION}/kazurayam-vba-lib.xlam"
+    USERNAME = "uraya"
+    ADDINS_DIR = "C:\\Users\\${USERNAME}\\AppData\\Roaming\\Microsoft\\AddIns"
+}
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+def downloadFile = { remoteUrl, dir ->
+    if (!Files.exists(dir)) {
+        Files.createDirectories(dir)
+    }
+    Path outFile = dir.resolve("${remoteUrl.tokenize('/')[-1]}")
+    outFile.toFile().withOutputStream { out ->
+        new URL(remoteUrl).withInputStream { from ->
+            out << from
+        }
+    }
+    return outFile
+}
+
+task updateAddIn {
+    doLast {
+        Path downloadDir = Paths.get("${buildDir}").resolve("tmp")
+        Path downloaded = downloadFile(TARGET_URL, downloadDir)
+        Path addin = Paths.get(ADDINS_DIR).resolve(downloaded.getFileName())
+        Files.copy(downloaded, addin, StandardCopyOption.REPLACE_EXISTING)
+        println "downloaded ${TARGET_URL}, placed it into ${addin}"
+    }
+}
