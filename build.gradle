@@ -33,3 +33,12 @@ task updateAddIn {
         println "downloaded ${TARGET_URL}, placed it into ${addin}"
     }
 }
+
+task deployAddIn {
+    doLast {
+        Path source = Paths.get("${buildDir}").resolve("..").resolve("kazurayam-vba-lib.xlam")
+        Path addin = Paths.get(ADDINS_DIR).resolve("kazurayam-vba-lib.xlam")
+        Files.copy(source, addin, StandardCopyOption.REPLACE_EXISTING)
+        println "deployed ${source.normalize().toString()} to ${addin}"
+    }
+}
