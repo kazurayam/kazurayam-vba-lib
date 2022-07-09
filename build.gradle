@@ -3,7 +3,7 @@ version = "0.1.0"
 ext {
     TARGET_VERSION = "0.1.0"
     TARGET_URL = "https://github.com/kazurayam/kazurayam-vba-lib/raw/${TARGET_VERSION}/kazurayam-vba-lib.xlam"
-    USERNAME = "uraya"
+    USERNAME = System.getProperty("user.name")
     ADDINS_DIR = "C:\\Users\\${USERNAME}\\AppData\\Roaming\\Microsoft\\AddIns"
 }
 
