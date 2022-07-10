@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.kazurayam:extract-vba.gradle.plugin:0.1.0-SNAPSHOT'
+    }
+}
+apply plugin: 'com.kazurayam.extract-vba'
+
 version = "0.1.0"
 
 ext {
@@ -11,6 +22,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+
 def downloadFile = { remoteUrl, dir ->
     if (!Files.exists(dir)) {
         Files.createDirectories(dir)
@@ -41,4 +53,9 @@ task deployAddIn {
         Files.copy(source, addin, StandardCopyOption.REPLACE_EXISTING)
         println "deployed ${source.normalize().toString()} to ${addin}"
     }
+}
+
+extractVBA {
+    input = 'kazurayam-vba-lib.xlsm'
+    outputDir = 'src/main/vba'
 }
