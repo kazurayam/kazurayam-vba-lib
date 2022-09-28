@@ -1,8 +1,6 @@
-Attribute VB_Name = "TestKz"
+Attribute VB_Name = "TestKzFile"
 Option Explicit
 Option Private Module
-
-'Kzモジュールに書かれたPublicなSubやFunctionをRubberduckを使ってユニットテストする
 
 '@TestModule
 '@Folder("Tests")
@@ -80,6 +78,8 @@ Private Sub Test_KzCreateFolder()
     KzDeleteFolder (p)
 End Sub
 
+
+
 '@TestMethod("KzEnsureFolders関数をユニットテストする")
 Private Sub Test_KzEnsureFolders()
     'EnsureFolders(p)はフォルダを作る。pの親フォルダが無かったらその祖先にまで遡って作る。
@@ -89,12 +89,16 @@ Private Sub Test_KzEnsureFolders()
     KzDeleteFolder (p)
 End Sub
 
+
+
+
 '@TestMethod("KzPathExists関数をユニットテストする")
 Private Sub Test_KzPathExists()
     Assert.IsTrue KzPathExists(ThisWorkbook.path)
     Dim p As String: p = ThisWorkbook.path & "\" & "kazurayam-vba-lib.xlsm"
     Assert.IsTrue KzPathExists(p)
 End Sub
+
 
 '@TestMethod("KzWriteTextIntoFile関数とDeleteFile関数をテストする")
 Private Sub Test_KzWriteTextIntoFile_and_KzDeleteFile()
@@ -109,42 +113,6 @@ Private Sub Test_KzWriteTextIntoFile_and_KzDeleteFile()
     KzDeleteFile (file)
 End Sub
 
-'@TestMethod("KzVerifyWorksheetExists(sheetName As String)をテストする")
-Private Sub Test_KzVerifyWorksheetExists()
-    'Assert:
-    Assert.IsTrue KzVerifyWorksheetExists("Sheet1")
-    Assert.IsFalse KzVerifyWorksheetExists("No Such Worksheet")
-End Sub
 
-'@TestMethod("KzDeleteWorksheetIfExists(sheetName As String)をテストする")
-Private Sub Test_KzDeleteWorkSheetIfExists()
-    'Arrange
-    ' カレントのWorkbookにワークシートを挿入する、
-    ' シートの名前はTest_DeleteWorkSheetIfExists
-    Dim wsName As String: wsName = "Test_KzDeleteWorksheetIfExists"
-    Worksheets.Add(After:=Worksheets(Worksheets.Count)) _
-        .Name = wsName
-    'Act:
-    ' 挿入したワークシートを削除する
-    KzDeleteWorksheetIfExists (wsName)
-    ' 一時的に挿入したワークシートがもはや存在しないことを確認する
-    Assert.IsFalse KzVerifyWorksheetExists(wsName)
-End Sub
-
-'@TestMethod("KzExistsKey関数をユニットテストする")
-Private Sub Test_KzExistsKey()
-    'VBAのCollectionは連想配列のようにKeyとItemのペアを持つ場合もある
-    '連想配列のようなCollectionが指定のKeyを持っているかどうかを調べてBooleanを返す
-    'Arrange:
-    Dim oCol As New Collection
-    With oCol
-        .Add Key:="テレビ", Item:="TV"
-        .Add Key:="冷蔵庫", Item:="fridge"
-        .Add Key:="炊飯器", Item:="rice cooker"
-    End With
-    'Assert
-    Assert.IsTrue KzExistsKey(oCol, "炊飯器")
-    Assert.IsFalse KzExistsKey(oCol, "ルンバ")
-End Sub
 
 
