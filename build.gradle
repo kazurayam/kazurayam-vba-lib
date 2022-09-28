@@ -1,15 +1,4 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.kazurayam:extract-vba.gradle.plugin:0.1.0-SNAPSHOT'
-    }
-}
-apply plugin: 'com.kazurayam.extract-vba'
-
-version = "0.1.0"
+version = "0.2.0-SNAPSHOT"
 
 ext {
     TARGET_VERSION = "0.1.0"
@@ -53,9 +42,4 @@ task deployAddIn {
         Files.copy(source, addin, StandardCopyOption.REPLACE_EXISTING)
         println "deployed ${source.normalize().toString()} to ${addin}"
     }
-}
-
-extractVBA {
-    input = 'kazurayam-vba-lib.xlsm'
-    outputDir = 'src/main/vba'
 }

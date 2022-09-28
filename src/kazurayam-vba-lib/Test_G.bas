@@ -1,12 +1,12 @@
 Attribute VB_Name = "Test_G"
 Option Explicit
 
-' G.ToLocalFilePath()ã‚’å˜ä½“ãƒ†ã‚¹ãƒˆã™ã‚‹
+' G.ToLocalFilePath()‚ğ’P‘ÌƒeƒXƒg‚·‚é
 Sub Test_ToLocalFilePath()
     G.Cls
     Debug.Print vbCrLf; "---- Test_ToLocalFilePath() ----"
-    Dim Source As String: Source = "https://d.docs.live.net/c5960fe753e170b9/ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—/Excel-Word-VBA"
-    Dim expect As String: expect = "C:\Users\uraya\OneDrive\ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—\Excel-Word-VBA"
+    Dim Source As String: Source = "https://d.docs.live.net/c5960fe753e170b9/ƒfƒXƒNƒgƒbƒv/Excel-Word-VBA"
+    Dim expect As String: expect = "C:\Users\uraya\OneDrive\ƒfƒXƒNƒgƒbƒv\Excel-Word-VBA"
     Dim actual As String
     actual = ToLocalFilePath(Source)
     Debug.Print "source:" & vbTab; Chr(34); Source; Chr(34)
@@ -44,32 +44,32 @@ Sub Test_WriteTextIntoFile_and_DeleteFile()
     G.DeleteFile (file)
 End Sub
 
-' G.VerifyWorksheetExists(sheetName As String)ã‚’ãƒ†ã‚¹ãƒˆã™ã‚‹
+' G.VerifyWorksheetExists(sheetName As String)‚ğƒeƒXƒg‚·‚é
 Sub Test_VerifyWorksheetExists()
     Debug.Assert G.VerifyWorksheetExists("Sheet1")
     Debug.Assert Not G.VerifyWorksheetExists("No Such Worksheet")
 End Sub
 
-' G.DeleteWorksheetIfExists(sheetName As String)ã‚’ãƒ†ã‚¹ãƒˆã™ã‚‹
+' G.DeleteWorksheetIfExists(sheetName As String)‚ğƒeƒXƒg‚·‚é
 Sub Test_DeleteWorkSheetIfExists()
-    ' ã‚«ãƒ¬ãƒ³ãƒˆã®Workbookã«ãƒ¯ãƒ¼ã‚¯ã‚·ãƒ¼ãƒˆã‚’æŒ¿å…¥ã™ã‚‹ã€
-    ' ã‚·ãƒ¼ãƒˆã®åå‰ã¯Test_DeleteWorkSheetIfExists
+    ' ƒJƒŒƒ“ƒg‚ÌWorkbook‚Éƒ[ƒNƒV[ƒg‚ğ‘}“ü‚·‚éA
+    ' ƒV[ƒg‚Ì–¼‘O‚ÍTest_DeleteWorkSheetIfExists
     Dim wsName As String: wsName = "Test_DeleteWorksheetIfExists"
     Worksheets.Add(After:=Worksheets(Worksheets.Count)) _
         .Name = wsName
-    ' æŒ¿å…¥ã—ãŸãƒ¯ãƒ¼ã‚¯ã‚·ãƒ¼ãƒˆã‚’å‰Šé™¤ã™ã‚‹
+    ' ‘}“ü‚µ‚½ƒ[ƒNƒV[ƒg‚ğíœ‚·‚é
     G.DeleteWorksheetIfExists (wsName)
-    ' ä¸€æ™‚çš„ã«æŒ¿å…¥ã—ãŸãƒ¯ãƒ¼ã‚¯ã‚·ãƒ¼ãƒˆãŒã‚‚ã¯ã‚„å­˜åœ¨ã—ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+    ' ˆê“I‚É‘}“ü‚µ‚½ƒ[ƒNƒV[ƒg‚ª‚à‚Í‚â‘¶İ‚µ‚È‚¢‚±‚Æ‚ğŠm”F‚·‚é
     Debug.Assert Not G.VerifyWorksheetExists(wsName)
 End Sub
 
 Sub Test_ExistsKey()
     Dim oCol As New Collection
     With oCol
-        .Add Key:="ãƒ†ãƒ¬ãƒ“", Item:="TV"
-        .Add Key:="å†·è”µåº«", Item:="fridge"
-        .Add Key:="ç‚Šé£¯å™¨", Item:="rice cooker"
+        .Add Key:="ƒeƒŒƒr", Item:="TV"
+        .Add Key:="—â‘ ŒÉ", Item:="fridge"
+        .Add Key:="†”ÑŠí", Item:="rice cooker"
     End With
-    Debug.Assert G.ExistsKey(oCol, "ç‚Šé£¯å™¨")
-    Debug.Assert Not G.ExistsKey(oCol, "ãƒ«ãƒ³ãƒ")
+    Debug.Assert G.ExistsKey(oCol, "†”ÑŠí")
+    Debug.Assert Not G.ExistsKey(oCol, "ƒ‹ƒ“ƒo")
 End Sub

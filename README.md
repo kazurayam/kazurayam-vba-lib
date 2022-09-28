@@ -45,3 +45,7 @@ $ ./gradle deployAddIn
 - https://tonari-it.com/excel-vba-class-addin/
 - https://tonari-it.com/excel-vba-class-addin-reference/
 - https://excel-ubara.com/excelvba4/EXCEL297.html
+
+## VBAソースコードをxlsmファイルからsrcフォルダにどうやってEXPORTしたか
+
+Rubberduckの機能を使った。ctrl+shift+Eでexportできる。

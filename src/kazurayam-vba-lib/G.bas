@@ -1,6 +1,8 @@
 Attribute VB_Name = "G"
 Option Explicit
 
+' G: A collection of Global Public Functions that is applicable to any type of VBA projects
+
 ' Clear Immediate Window
 ' calls Debug.Print many times to output blank lines
 ' so that the immediate window is wiped out
@@ -12,10 +14,19 @@ Public Sub Cls()
 End Sub
 
 
-' å¼•æ•°pathãŒ "https://d.docs.live.net/c5960fe753e170b9/ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—/Excel-Word-VBA" ã®ã‚ˆã†ã«
-' ãã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒOneDriveã«ãƒãƒƒãƒ”ãƒ³ã‚°ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¤ºã™URLæ–‡å­—åˆ—ã‹ã©ã†ã‹ã‚’èª¿ã¹ã‚‹ã€‚
-' ã‚‚ã—ãã†ãªã‚‰ã° "C:\Users" ã§å§‹ã¾ã‚‹OneDriveã®ãƒ­ãƒ¼ã‚«ãƒ«ãªå½¢å¼ã®Stringã«æ›¸ãã‹ãˆã¦è¿”ã™ã€‚
-' ã‚‚ã—ãã†ã§ãªã‘ã‚Œã°pathã‚’ãã®ã¾ã¾è¿”ã™ã€‚
+Function AbsolutifyPath(ByVal basePath As String, ByVal RefPath As String) As String
+    ' ƒtƒ@ƒCƒ‹‚Ì‘Š‘ÎƒpƒX‚ğâ‘ÎƒpƒX‚É•ÏŠ·‚·‚é
+    ' basePath‚ÉŠî’ê‚ğw’è‚·‚é
+    Dim objFso As Object: Set objFso = CreateObject("Scripting.FileSystemObject")
+    AbsolutifyPath = objFso.GetAbsolutePathName(objFso.BuildPath(basePath, RefPath))
+    Set objFso = Nothing
+End Function
+
+
+' ˆø”path‚ª "https://d.docs.live.net/c5960fe753e170b9/ƒfƒXƒNƒgƒbƒv/Excel-Word-VBA" ‚Ì‚æ‚¤‚É
+' ‚»‚Ìƒtƒ@ƒCƒ‹‚ªOneDrive‚Éƒ}ƒbƒsƒ“ƒO‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ğ¦‚·URL•¶š—ñ‚©‚Ç‚¤‚©‚ğ’²‚×‚éB
+' ‚à‚µ‚»‚¤‚È‚ç‚Î "C:\Users" ‚Ån‚Ü‚éOneDrive‚Ìƒ[ƒJƒ‹‚ÈŒ`®‚ÌString‚É‘‚«‚©‚¦‚Ä•Ô‚·B
+' ‚à‚µ‚»‚¤‚Å‚È‚¯‚ê‚Îpath‚ğ‚»‚Ì‚Ü‚Ü•Ô‚·B
 Function ToLocalFilePath(ByVal path As String) As String
     Dim searchResult As Integer
     searchResult = VBA.Strings.InStr(1, path, "https://d.docs.live.net/", vbTextCompare)
@@ -23,16 +34,16 @@ Function ToLocalFilePath(ByVal path As String) As String
     If searchResult = 1 Then
         Dim s() As String
         s = VBA.Strings.Split(path, "/", Limit:=5, Compare:=vbBinaryCompare)
-        ' sã¯é…åˆ—ã§ä¸­èº«ã¯ Arrays("https:", "", "d.docs.live.net", "c5960fe753e170b9", "ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—/Excel-Word-VBA") ã«ãªã£ã¦ã„ã‚‹
+        ' s‚Í”z—ñ‚Å’†g‚Í Arrays("https:", "", "d.docs.live.net", "c5960fe753e170b9", "ƒfƒXƒNƒgƒbƒv/Excel-Word-VBA") ‚É‚È‚Á‚Ä‚¢‚é
         Dim objFso As Object
         Set objFso = CreateObject("Scripting.FileSystemObject")
         Dim p As String: p = objFso.GetAbsolutePathName(objFso.BuildPath(VBA.Interaction.Environ("OneDrive"), s(UBound(s))))
-        ' UBoundé–¢æ•°ã¯å¼•æ•°ã«æŒ‡å®šã—ãŸé…åˆ—ã§ä½¿ç”¨ã§ãã‚‹æœ€ã‚‚å¤§ãã„ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç•ªå·ã‚’è¿”ã™
-        ' s(UBound(s)) ã¯ é…åˆ—sã®5ç•ªç›®ã®è¦ç´  "ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—/Excel-Word-VBA" ã‚’è¿”ã™
-        ' VBA.Interaction.Environ()ã¯ç’°å¢ƒå¤‰æ•°ã®å€¤ã‚’è¿”ã™
-        ' Environ("OneDrive")ã®å€¤ã¯ãŸã¨ãˆã° "C:\Users\uraya\OneDrive" ã¨ã„ã†æ–‡å­—åˆ—ã‚’è¿”ã™
-        ' objFso.BuildPath(path, name)ã¯ãƒ‘ã‚¹ã¨ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¡¨ã™äºŒã¤ã®æ–‡å­—åˆ—ã‚’é€£çµã—ã¦ã²ã¨ã¤ã®æ–‡å­—åˆ—ã‚’è¿”ã™ã€‚/ã¯\ã«ç½®ãæ›ãˆã‚‰ã‚Œã‚‹ã€‚
-        ' objFso.GetAbsolutePathName(pathspec)ã¯ pathspecï¼ˆç›¸å¯¾ãƒ‘ã‚¹ã‹ã‚‚ã—ã‚Œãªã„ï¼‰ã‚’çµ¶å¯¾ãƒ‘ã‚¹ã«å¤‰æ›ã—ã¾ã™
+        ' UBoundŠÖ”‚Íˆø”‚Éw’è‚µ‚½”z—ñ‚Åg—p‚Å‚«‚éÅ‚à‘å‚«‚¢ƒCƒ“ƒfƒbƒNƒX”Ô†‚ğ•Ô‚·
+        ' s(UBound(s)) ‚Í ”z—ñs‚Ì5”Ô–Ú‚Ì—v‘f "ƒfƒXƒNƒgƒbƒv/Excel-Word-VBA" ‚ğ•Ô‚·
+        ' VBA.Interaction.Environ()‚ÍŠÂ‹«•Ï”‚Ì’l‚ğ•Ô‚·
+        ' Environ("OneDrive")‚Ì’l‚Í‚½‚Æ‚¦‚Î "C:\Users\uraya\OneDrive" ‚Æ‚¢‚¤•¶š—ñ‚ğ•Ô‚·
+        ' objFso.BuildPath(path, name)‚ÍƒpƒX‚Æƒtƒ@ƒCƒ‹–¼‚ğ•\‚·“ñ‚Â‚Ì•¶š—ñ‚ğ˜AŒ‹‚µ‚Ä‚Ğ‚Æ‚Â‚Ì•¶š—ñ‚ğ•Ô‚·B/‚Í\‚É’u‚«Š·‚¦‚ç‚ê‚éB
+        ' objFso.GetAbsolutePathName(pathspec)‚Í pathspeci‘Š‘ÎƒpƒX‚©‚à‚µ‚ê‚È‚¢j‚ğâ‘ÎƒpƒX‚É•ÏŠ·‚µ‚Ü‚·
         ToLocalFilePath = p
         Set objFso = Nothing
     Else
@@ -41,8 +52,8 @@ Function ToLocalFilePath(ByVal path As String) As String
 End Function
 
 
-' Stringã¨ã—ã¦ãƒ‘ã‚¹ãŒæŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ãŒã™ã§ã«å­˜åœ¨ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’èª¿ã¹ã¦
-' ã‚‚ã—ã‚‚æœªã ç„¡ã‹ã£ãŸã‚‰ä½œã‚‹ã€‚ãŸã ã—è¦ªãƒ•ã‚©ãƒ«ãƒ€ã‚‚ç„¡ã„å ´åˆã«ã¯å¤±æ•—ã™ã‚‹ã€‚
+' String‚Æ‚µ‚ÄƒpƒX‚ªw’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚ª‚·‚Å‚É‘¶İ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ’²‚×‚Ä
+' ‚à‚µ‚à–¢‚¾–³‚©‚Á‚½‚çì‚éB‚½‚¾‚µeƒtƒHƒ‹ƒ_‚à–³‚¢ê‡‚É‚Í¸”s‚·‚éB
 Sub CreateFolder(folderPath As String)
     Dim objFso As Object
     Set objFso = CreateObject("Scripting.FileSystemObject")
@@ -55,9 +66,9 @@ Sub CreateFolder(folderPath As String)
     Set objFso = Nothing
 End Sub
 
-' ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ•ãƒ«ãƒ‘ã‚¹ãŒä¸ãˆã‚‰ã‚Œã‚‹ã“ã¨ã‚’å‰æã™ã‚‹ã€‚ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œã‚‹ã€‚
-' ãƒ«ãƒ¼ãƒˆã‹ã‚‰å­å­«ãƒ•ã‚©ãƒ«ãƒ€ã‚’é †ç•ªã«æœ‰ç„¡ã‚’ã—ã‚‰ã¹ã¦ã€ç„¡ã‘ã‚Œã°MkDirã§ä½œã‚‹ã€‚
-' ã¤ã¾ã‚ŠæŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ã®å…ˆç¥–ãŒç„¡ã‘ã‚Œã°å…ˆç¥–ã‚‚ä½œã£ã¦ã—ã¾ã†ã€‚
+' ƒtƒHƒ‹ƒ_‚Ìƒtƒ‹ƒpƒX‚ª—^‚¦‚ç‚ê‚é‚±‚Æ‚ğ‘O’ñ‚·‚éBƒtƒHƒ‹ƒ_‚ğì‚éB
+' ƒ‹[ƒg‚©‚çq‘·ƒtƒHƒ‹ƒ_‚ğ‡”Ô‚É—L–³‚ğ‚µ‚ç‚×‚ÄA–³‚¯‚ê‚ÎMkDir‚Åì‚éB
+' ‚Â‚Ü‚èw’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚Ìæ‘c‚ª–³‚¯‚ê‚Îæ‘c‚àì‚Á‚Ä‚µ‚Ü‚¤B
 Sub EnsureFolders(path As String)
     Dim tmp As String
     Dim arr() As String
@@ -67,14 +78,14 @@ Sub EnsureFolders(path As String)
     For i = LBound(arr) + 1 To UBound(arr)
         tmp = tmp & "\" & arr(i)
         If Dir(tmp, vbDirectory) = "" Then
-            ' ãƒ•ã‚©ãƒ«ãƒ€ãŒç„¡ã‘ã‚Œã°ä½œã‚‹
+            ' ƒtƒHƒ‹ƒ_‚ª–³‚¯‚ê‚Îì‚é
             MkDir tmp
         End If
     Next i
 End Sub
 
-' pathãŒç¤ºã™ãƒ‘ã‚¹ã«ãƒ•ã‚¡ã‚¤ãƒ«ã¾ãŸã¯ãƒ•ã‚©ãƒ«ãƒ€ãŒå­˜åœ¨ã—ã¦ã„ãŸã‚‰Trueã‚’ã‹ãˆã™ã€‚
-' pathãŒç¤ºã™ãƒ‘ã‚¹ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚‚ãƒ•ã‚©ãƒ«ãƒ€ã‚‚ç„¡ã„ãªã‚‰Falseã‚’ã‹ãˆã™
+' path‚ª¦‚·ƒpƒX‚Éƒtƒ@ƒCƒ‹‚Ü‚½‚ÍƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ä‚¢‚½‚çTrue‚ğ‚©‚¦‚·B
+' path‚ª¦‚·ƒpƒX‚Éƒtƒ@ƒCƒ‹‚àƒtƒHƒ‹ƒ_‚à–³‚¢‚È‚çFalse‚ğ‚©‚¦‚·
 Function PathExists(ByVal path As String) As Boolean
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
     Dim flg As Boolean: flg = False
@@ -86,8 +97,8 @@ Function PathExists(ByVal path As String) As Boolean
     PathExists = flg
 End Function
 
-' ãƒ‘ã‚¹ã‚’æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¦ã„ãŸã‚‰å‰Šé™¤ã™ã‚‹ã€‚
-' ãƒ•ã‚¡ã‚¤ãƒ«ãŒç„¡ã‘ã‚Œã°ãªã«ã‚‚ã—ãªã„ã€‚
+' ƒpƒX‚ğw’è‚µ‚½ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ä‚¢‚½‚çíœ‚·‚éB
+' ƒtƒ@ƒCƒ‹‚ª–³‚¯‚ê‚Î‚È‚É‚à‚µ‚È‚¢B
 Sub DeleteFile(ByVal fileToDelete As String)
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
     If fso.FileExists(fileToDelete) Then 'See above
@@ -98,7 +109,7 @@ Sub DeleteFile(ByVal fileToDelete As String)
     End If
 End Sub
 
-' ãƒ•ã‚©ãƒ«ãƒ€ãŒå­˜åœ¨ã—ã¦ã„ãŸã‚‰å‰Šé™¤ã™ã‚‹
+' ƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ä‚¢‚½‚çíœ‚·‚é
 Sub DeleteFolder(ByVal folderToDelete As String)
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
     If fso.FolderExists(folderToDelete) Then
@@ -106,8 +117,8 @@ Sub DeleteFolder(ByVal folderToDelete As String)
     End If
 End Sub
 
-' ãƒ†ã‚­ã‚¹ãƒˆã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«WRITEã™ã‚‹ã€‚
-' ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç´ã‚ã‚‹ã¹ãè¦ªãƒ•ã‚©ãƒ«ãƒ€ãŒç„¡ã‘ã‚Œã°ä½œã£ã¦ã‹ã‚‰ã€‚
+' ƒeƒLƒXƒg‚ğƒtƒ@ƒCƒ‹‚ÉWRITE‚·‚éB
+' ƒtƒ@ƒCƒ‹‚ğ”[‚ß‚é‚×‚«eƒtƒHƒ‹ƒ_‚ª–³‚¯‚ê‚Îì‚Á‚Ä‚©‚çB
 Sub WriteTextIntoFile(ByVal textData As String, ByVal file As String)
     Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
     G.EnsureFolders (fso.getParentFolderName(file))
@@ -123,7 +134,7 @@ End Sub
 
 
 
-' æŒ‡å®šã•ã‚ŒãŸåã®ã‚·ãƒ¼ãƒˆãŒã‚«ãƒ¬ãƒ³ãƒˆã®ãƒ–ãƒƒã‚¯ã«å­˜åœ¨ã—ã¦ã„ãŸã‚‰Trueã‚’è¿”ã™
+' w’è‚³‚ê‚½–¼‚ÌƒV[ƒg‚ªƒJƒŒƒ“ƒg‚ÌƒuƒbƒN‚É‘¶İ‚µ‚Ä‚¢‚½‚çTrue‚ğ•Ô‚·
 Public Function VerifyWorksheetExists(sheetName As String) As Boolean
     Dim ws As Worksheet
     Dim flg As Boolean: flg = False
@@ -136,15 +147,15 @@ Public Function VerifyWorksheetExists(sheetName As String) As Boolean
     VerifyWorksheetExists = flg
 End Function
 
-' æŒ‡å®šã•ã‚ŒãŸåã®ã‚·ãƒ¼ãƒˆãŒã‚«ãƒ¬ãƒ³ãƒˆã®ãƒ–ãƒƒã‚¯ã®ãªã‹ã«å­˜åœ¨ã™ã‚Œã°å‰Šé™¤ã™ã‚‹
+' w’è‚³‚ê‚½–¼‚ÌƒV[ƒg‚ªƒJƒŒƒ“ƒg‚ÌƒuƒbƒN‚Ì‚È‚©‚É‘¶İ‚·‚ê‚Îíœ‚·‚é
 Public Function DeleteWorksheetIfExists(sheetName As String) As Boolean
     Dim ws As Worksheet
     Dim flg As Boolean: flg = False
-    'æŒ‡å®šã•ã‚ŒãŸãƒ–ãƒƒã‚¯ã«æŒ‡å®šã—ãŸã‚·ãƒ¼ãƒˆãŒå­˜åœ¨ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
+    'w’è‚³‚ê‚½ƒuƒbƒN‚Éw’è‚µ‚½ƒV[ƒg‚ª‘¶İ‚·‚é‚©ƒ`ƒFƒbƒN
     For Each ws In Worksheets
         If ws.Name = sheetName Then
-            'ã‚ã‚Œã°ã‚·ãƒ¼ãƒˆã‚’å‰Šé™¤ã™ã‚‹
-            Application.DisplayAlerts = False    ' ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’éè¡¨ç¤º
+            '‚ ‚ê‚ÎƒV[ƒg‚ğíœ‚·‚é
+            Application.DisplayAlerts = False    ' ƒƒbƒZ[ƒW‚ğ”ñ•\¦
             ws.Delete
             Application.DisplayAlerts = True
             flg = True
@@ -156,36 +167,36 @@ End Function
 
 ' https://y-moride.com/vba/collection-key-exists.html#toc1
 '*********************************************************
-'* ExistsKeyï¼ˆCollentionå†…ã®ã‚­ãƒ¼æ¤œç´¢é–¢æ•°ï¼‰
+'* ExistsKeyiCollention“à‚ÌƒL[ŒŸõŠÖ”j
 '*********************************************************
-'* ç¬¬ï¼‘å¼•æ•° | Collection | æ¤œç´¢å¯¾è±¡ã¨ãªã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-'* ç¬¬ï¼’å¼•æ•° |   String   | æ¤œç´¢ã™ã‚‹ã‚­ãƒ¼
-'*  æˆ»ã‚Šå€¤ã€€|   Boolan   | True Or False â€»Falseï¼ åˆæœŸå€¤
+'* ‘æ‚Pˆø” | Collection | ŒŸõ‘ÎÛ‚Æ‚È‚éƒIƒuƒWƒFƒNƒg
+'* ‘æ‚Qˆø” |   String   | ŒŸõ‚·‚éƒL[
+'*  –ß‚è’l@|   Boolan   | True Or False ¦False—‰Šú’l
 '*********************************************************
-'*   èª¬æ˜   | ç¬¬ï¼’å¼•æ•°ã‚’ã‚­ãƒ¼ã¨ã—ã¦Itemãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®Ÿè¡Œã—ã€
-'*   ã€€ã€€   | çµæœã‚’ã‚‚ã¨ã«ã‚­ãƒ¼ã®å­˜åœ¨ã‚’ç¢ºèªã™ã‚‹ã€‚
+'*   à–¾   | ‘æ‚Qˆø”‚ğƒL[‚Æ‚µ‚ÄItemƒƒ\ƒbƒh‚ğÀs‚µA
+'*   @@   | Œ‹‰Ê‚ğ‚à‚Æ‚ÉƒL[‚Ì‘¶İ‚ğŠm”F‚·‚éB
 '*********************************************************
-'*   å‚™è€ƒ   | ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæœªè¨­å®šã®å ´åˆ â‡’ æˆ»ã‚Šå€¤ã€ŒFalseã€
-'*   ã€€ã€€   | ãƒ¡ãƒ³ãƒãƒ¼æ•°ã€Œ0ã€ã®å ´åˆ â‡’ æˆ»ã‚Šå€¤ã€ŒFalseã€
+'*   ”õl   | ƒIƒuƒWƒFƒNƒg–¢İ’è‚Ìê‡ Ë –ß‚è’luFalsev
+'*   @@   | ƒƒ“ƒo[”u0v‚Ìê‡ Ë –ß‚è’luFalsev
 '*********************************************************
  
 Function ExistsKey(objCol As Collection, strKey As String) As Boolean
      
-    'æˆ»ã‚Šå€¤ã®åˆæœŸå€¤ï¼šFalse
+    '–ß‚è’l‚Ì‰Šú’lFFalse
     ExistsKey = False
      
-    'å¤‰æ•°ã«Collectionæœªè¨­å®šã®å ´åˆã¯å‡¦ç†çµ‚äº†
+    '•Ï”‚ÉCollection–¢İ’è‚Ìê‡‚Íˆ—I—¹
     If objCol Is Nothing Then Exit Function
      
-    'Collectionã®ãƒ¡ãƒ³ãƒãƒ¼æ•°ãŒã€Œ0ã€ã®å ´åˆã¯å‡¦ç†çµ‚äº†
+    'Collection‚Ìƒƒ“ƒo[”‚ªu0v‚Ìê‡‚Íˆ—I—¹
     If objCol.Count = 0 Then Exit Function
      
     On Error Resume Next
      
-    'Itemãƒ¡ã‚½ãƒƒãƒ‰ã‚’å®Ÿè¡Œ
+    'Itemƒƒ\ƒbƒh‚ğÀs
     Call objCol.Item(strKey)
          
-    'ã‚¨ãƒ©ãƒ¼å€¤ãŒãªã„å ´åˆï¼šã‚­ãƒ¼æ¤œç´¢ã¯ãƒ’ãƒƒãƒˆï¼ˆæˆ»ã‚Šå€¤ï¼šTrueï¼‰
+    'ƒGƒ‰[’l‚ª‚È‚¢ê‡FƒL[ŒŸõ‚Íƒqƒbƒgi–ß‚è’lFTruej
     If Err.Number = 0 Then ExistsKey = True
  
 End Function
