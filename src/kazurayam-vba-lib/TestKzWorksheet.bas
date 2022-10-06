@@ -62,20 +62,24 @@ Private Sub Test_KzDeleteWorkSheetIfExists()
     Assert.IsFalse KzVerifyWorksheetExists(wsName)
 End Sub
 
-'@TestMethod("KzExistsKey関数をユニットテストする")
-Private Sub Test_KzExistsKey()
-    'VBAのCollectionは連想配列のようにKeyとItemのペアを持つ場合もある
-    '連想配列のようなCollectionが指定のKeyを持っているかどうかを調べてBooleanを返す
-    'Arrange:
-    Dim oCol As New Collection
-    With oCol
-        .Add key:="テレビ", Item:="TV"
-        .Add key:="冷蔵庫", Item:="fridge"
-        .Add key:="炊飯器", Item:="rice cooker"
-    End With
-    'Assert
-    Assert.IsTrue KzExistsKey(oCol, "炊飯器")
-    Assert.IsFalse KzExistsKey(oCol, "ルンバ")
-End Sub
 
+
+'@TestMethod("KzImportWorksheetFromWorkbookをユニットテストする")
+Private Sub Test_KzImportWorksheetFromWorkbook()
+    On Error GoTo TestFail
+    'Arrange:
+    Dim wbSource As Workbook: Set wbSource = ActiveWorkbook
+    Dim sourceSheetName As String: sourceSheetName = "Sheet1"
+    Dim targetSheetName As String: targetSheetName = "work"
+    'Act
+    Call KzImportWorksheetFromWorkbook(wbSource, sourceSheetName, targetSheetName)
+    'Assert
+    
+    'TearDown
+    Call KzDeleteWorksheetIfExists(targetSheetName)
+TestExit:
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+End Sub
 

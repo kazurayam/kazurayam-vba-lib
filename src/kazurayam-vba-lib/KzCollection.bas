@@ -17,7 +17,7 @@ Option Explicit
 '*   備考   | オブジェクト未設定の場合 ⇒ 戻り値「False」
 '*   　　   | メンバー数「0」の場合 ⇒ 戻り値「False」
 '*********************************************************
- 
+
 Public Function KzExistsKey(objCol As Collection, strKey As String) As Boolean
      
     '戻り値の初期値：False
@@ -38,4 +38,5 @@ Public Function KzExistsKey(objCol As Collection, strKey As String) As Boolean
     If Err.Number = 0 Then KzExistsKey = True
  
 End Function
+
 

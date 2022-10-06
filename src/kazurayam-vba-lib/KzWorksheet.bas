@@ -35,3 +35,32 @@ Public Function KzDeleteWorksheetIfExists(sheetName As String) As Boolean
     KzDeleteWorksheetIfExists = flg
 End Function
 
+
+' コピー元のワークシートのデータ全体をコピー先のワークシートにコピーする。
+' 第一引数にWorkbookインスタンスを指定する。
+' 第二引数はStringで、第一引数で指定されたワークブックのなかにあるワークシートの名前を指定する。
+' 第一引数と第二引数によりコピー元sourceとなるワークシートを特定する。
+' 第三引数はStringで、カレントのワークブックのなかのワークシート名を指定する。これをコピー先と解釈する。省略できない。
+' 第三引数として指定された名前のワークシートがカレントのワークブックに無かったら、ワークシートを新しく挿入する。
+' 第三引数として指定された名前のワークシートがカレントのワークブックにすでに存在していたら、
+' そのワークシートのなかのデータを全部消去してから、sourceのワークシートからデータを取り込む。
+' 参照：https://akira55.com/other_books/
+Public Sub KzImportWorksheetFromWorkbook(ByVal wbSource As Workbook, _
+                                        ByVal sourceSheetName As String, _
+                                        ByVal targetSheetName As String)
+    Dim wbTarget As Workbook: Set wbTarget = ActiveWorkbook
+    '貼り付け先のワークシートがすでにあったら内容を初期化する
+    If KzVerifyWorksheetExists(targetSheetName) Then
+        wbTarget.Worksheets(targetSheetName).Cells.Clear
+    Else
+        '貼り付け先のワークシートがまだ無かったら空のシートを挿入する
+        wbTarget.Worksheets.Add
+        ActiveSheet.Name = targetSheetName
+    End If
+    'コピー元ワークシートのすべてのセルをコピーして
+    wbSource.Worksheets(sourceSheetName).Cells.Copy
+    'コピー先ワークシート貼り付ける
+    wbTarget.Worksheets(targetSheetName).Range("A1").PasteSpecial xlPasteFormulasAndNumberFormats
+    Application.CutCopyMode = False 'コピー切り取りを解除
+End Sub
+
