@@ -37,15 +37,21 @@ End Sub
 
 
 
-
-
-
 '@TestMethod("KzVerifyWorksheetExists(sheetName As String)をテストする")
 Private Sub Test_KzVerifyWorksheetExists()
     'Assert:
     Assert.IsTrue KzVerifyWorksheetExists("Sheet1")
     Assert.IsFalse KzVerifyWorksheetExists("No Such Worksheet")
 End Sub
+
+
+'@TestMethod("KzIfWorksheetExistsInWorkbookをテストする（trueを返す場合）")
+Private Sub Test_KzIfWorksheetExistsInWorkbook()
+    'Assert:
+    Assert.IsTrue KzIfWorksheetExistsInWorkbook(ThisWorkbook, "Sheet1")
+    Assert.IsFalse KzIfWorksheetExistsInWorkbook(ThisWorkbook, "No Such Worksheet")
+End Sub
+
 
 '@TestMethod("KzDeleteWorksheetIfExists(sheetName As String)をテストする")
 Private Sub Test_KzDeleteWorkSheetIfExists()
@@ -72,7 +78,7 @@ Private Sub Test_KzImportWorksheetFromWorkbook()
     Dim sourceSheetName As String: sourceSheetName = "Sheet1"
     Dim targetSheetName As String: targetSheetName = "work"
     'Act
-    Call KzImportWorksheetFromWorkbook(wbSource, sourceSheetName, targetSheetName)
+    Call KzImportWorksheetFromWorkbook(wbSource, sourceSheetName, ThisWorkbook, targetSheetName)
     'Assert
     
     'TearDown
