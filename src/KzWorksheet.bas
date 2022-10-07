@@ -59,7 +59,7 @@ End Function
 ' すでに在ったら古いシートを削除してからsourceのシートをコピーする。
 ' ただしsourceWorkbookとtargetWorkbookが同じで、かつ、sourceSheetNameとtargetSheetNameが同じ場合は指定の誤りとみなしてエラーとする。
 '
-Public Sub KzFetchWorksheetFromWorkbook(ByVal sourceWorkbook As Workbook, _
+Public Sub KzImportWorksheetFromWorkbook(ByVal sourceWorkbook As Workbook, _
                                         ByVal sourceSheetName As String, _
                                         ByVal targetWorkbook As Workbook, _
                                         ByVal targetSheetName As String)
@@ -69,9 +69,7 @@ Public Sub KzFetchWorksheetFromWorkbook(ByVal sourceWorkbook As Workbook, _
     End If
     '貼り付け先のワークシートがすでにターゲットのワークブックのなかにあったら削除する
     If KzIfWorksheetExistsInWorkbook(targetWorkbook, targetSheetName) Then
-        Application.DisplayAlerts = False
         targetWorkbook.Worksheets(targetSheetName).Delete
-        Application.DisplayAlerts = True
     End If
     'コピー元ワークシートのすべてのセルをコピーしてターゲットのワークブックに新しいワークシートを挿入し
     sourceWorkbook.Worksheets(sourceSheetName).Copy After:=targetWorkbook.Sheets(targetWorkbook.Sheets.Count)

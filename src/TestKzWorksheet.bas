@@ -70,8 +70,8 @@ End Sub
 
 
 
-'@TestMethod("KzFetchWorksheetFromWorkbookをユニットテストする")
-Private Sub Test_KzFetchWorksheetFromWorkbook()
+'@TestMethod("KzImportWorksheetFromWorkbookをユニットテストする")
+Private Sub Test_KzImportWorksheetFromWorkbook()
     On Error GoTo TestFail
     'Arrange
     Dim sourceWorkbook As Workbook: Set sourceWorkbook = ThisWorkbook
@@ -79,7 +79,7 @@ Private Sub Test_KzFetchWorksheetFromWorkbook()
     Dim targetWorkbook As Workbook: Set targetWorkbook = sourceWorkbook
     Dim targetSheetName As String: targetSheetName = "copy"
     'Act
-    Call KzFetchWorksheetFromWorkbook(sourceWorkbook, sourceSheetName, targetWorkbook, targetSheetName)
+    Call KzImportWorksheetFromWorkbook(sourceWorkbook, sourceSheetName, targetWorkbook, targetSheetName)
     'Assert
     Assert.IsTrue KzVerifyWorksheetExists("copy")
     'TearDown
@@ -94,8 +94,8 @@ End Sub
 
 
 
-'@TestMethod("KzFetchWorksheetFromWorkbookがErrを投げる場合")
-Private Sub Test_KzFetchWorksheetFromWorkbook_shouldThrowErr()
+'@TestMethod("KzImportWorksheetFromWorkbookがErrを投げる場合")
+Private Sub Test_KzImportWorksheetFromWorkbook_shouldThrowErr()
     On Error GoTo TestFail
     'Arrange
     Dim sourceWorkbook As Workbook: Set sourceWorkbook = ThisWorkbook
@@ -103,7 +103,7 @@ Private Sub Test_KzFetchWorksheetFromWorkbook_shouldThrowErr()
     Dim targetWorkbook As Workbook: Set targetWorkbook = sourceWorkbook
     Dim targetSheetName As String: targetSheetName = "Sheet1"
     'Act
-    Call KzFetchWorksheetFromWorkbook(sourceWorkbook, sourceSheetName, targetWorkbook, targetSheetName)
+    Call KzImportWorksheetFromWorkbook(sourceWorkbook, sourceSheetName, targetWorkbook, targetSheetName)
     'Assert
     Assert.IsTrue KzVerifyWorksheetExists("copy")
     'TearDown
