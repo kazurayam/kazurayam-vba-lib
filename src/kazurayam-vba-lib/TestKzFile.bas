@@ -35,9 +35,10 @@ End Sub
 '@TestMethod("AbsolutifyPath関数をテストする")
 Private Sub Test_KzAbsolutifyPath()
     'ファイルの相対パスを絶対パスに変換する
+    KzCls
     'Arrange:
     Dim base As String: base = ThisWorkbook.path
-    Const relativePath = "..\Book1.xlsx"
+    Const relativePath = ".\data\Book1.xlsx"
     'Act:
     Dim absPath As String: absPath = KzAbsolutifyPath(base, relativePath)
     'Assert:
