@@ -35,8 +35,8 @@ Private Sub TestCleanup()
 End Sub
 
 
-'@TestMethod("DicSortをテスト")
-Private Sub TestAccessTable1()
+'@TestMethod("keyとvalueがどちらもString型であるDictionaryをソートする")
+Private Sub TestDictionaryOfStringString()
     On Error GoTo TestFail
     'Arrange:
     Dim dic As Object

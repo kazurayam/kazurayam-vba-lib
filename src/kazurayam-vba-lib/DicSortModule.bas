@@ -2,46 +2,46 @@ Attribute VB_Name = "DicSortModule"
 Option Explicit
 
 
-' DicSortModule: Dictionary連想配列をソートするSub DicSortを提供する
+' DicSortModule: Dictionary連想配列をキーの昇順にソートするSub DicSortを提供する
+' DictionaryのキーがStringで、valueもStringであることを前提する。
+' valueがオブジェクト型であるようなDictionaryは扱えない。型が不一致（Stringでないから）のエラーが発生する。
 
 ' Qiitaに掲載された記事 [VBAでDictionary（連想配列）を辞書順にソートする](https://qiita.com/daik/items/682743bb8bcd8b5f0689)が
 ' 公開したコードをまるまるコピーした。
 
-
-'' Dictionaryを参照引数にし、これをソートする破壊的プロシージャ。
+' Dictionaryを参照引数にし、これをソートする破壊的プロシージャ。
 Public Sub DicSort(ByRef dic As Object)
+    Dim i As Long, j As Long
+    Dim varTmp() As String
+    Dim key As Variant
+    Dim dicSize As Long: dicSize = dic.Count
+    
+    'dicのサイズに合わせて２次元配列のサイズを調整して
+    ReDim varTmp(dicSize + 1, 2)
 
-  Dim i As Long, j As Long, dicSize As Long
-  Dim varTmp() As String
-  Dim key As Variant
+    ' Dictionaryが空であるか、サイズが1以下であればソート不要
+    If dic Is Nothing Or dicSize < 2 Then
+        Exit Sub
+    End If
 
-  dicSize = dic.Count
+    ' Dictionaryのキーとvalueを２次元配列に転写
+    i = 0
+    For Each key In dic
+        varTmp(i, 0) = key
+        varTmp(i, 1) = dic(key)
+        i = i + 1
+    Next
+    
+    '２次元配列をキーの昇順でソート
+    Call QuickSort(varTmp, 0, dicSize - 1)
+    dic.RemoveAll
 
-  ReDim varTmp(dicSize + 1, 2)
-
-  ' Dictionaryが空か、サイズが1以下であればソート不要
-  If dic Is Nothing Or dicSize < 2 Then
-    Exit Sub
-  End If
-
-  ' Dictionaryから二元配列に転写
-  i = 0
-  For Each key In dic
-    varTmp(i, 0) = key
-    varTmp(i, 1) = dic(key)
-    i = i + 1
-  Next
-
-  'クイックソート
-  Call QuickSort(varTmp, 0, dicSize - 1)
-
-  dic.RemoveAll
-
-  For i = 0 To dicSize - 1
-    dic(varTmp(i, 0)) = varTmp(i, 1)
-  Next
+    '２次元配列の内容をDictionaryに上書きする
+    For i = 0 To dicSize - 1
+        dic(varTmp(i, 0)) = varTmp(i, 1)
+    Next
+    
 End Sub
-
 
 '' String型で2列の二次元配列を受け取り、これの1列目でクイックソートする（ほんとはCompareメソッドを渡すAdapterパターンで書きたいところ、VBAのオブジェクト指向厳しい感じで妥協）
 Private Sub QuickSort(ByRef targetVar() As String, ByVal min As Long, ByVal max As Long)
@@ -80,7 +80,6 @@ Private Sub QuickSort(ByRef targetVar() As String, ByVal min As Long, ByVal max 
     End If
 End Sub
 
-
 '' String型のx, y, z を辞書順比較し二番目のものを返す
 Private Function strMed3(ByVal x As String, ByVal y As String, ByVal z As String)
     If StrComp(x, y) < 0 Then
@@ -101,9 +100,6 @@ Private Function strMed3(ByVal x As String, ByVal y As String, ByVal z As String
         End If
     End If
 End Function
-
-
-
 
 '' テストメソッド
 Sub TestDicSort()
@@ -137,3 +133,4 @@ Sub TestDicSort()
 
     Debug.Print output
 End Sub
+
