@@ -7,10 +7,7 @@ Option Explicit
 ' calls Debug.Print many times to output blank lines
 ' so that the immediate window is wiped out
 Public Sub KzCls()
-    Dim i As Long
-    For i = 0 To 20
-        Debug.Print
-    Next i
+    Debug.Print String(200, vbCrLf)
 End Sub
 
 

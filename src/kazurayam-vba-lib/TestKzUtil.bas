@@ -39,9 +39,9 @@ Private Sub Test_KzExistsKey()
     'Arrange:
     Dim oCol As New Collection
     With oCol
-        .Add key:="テレビ", Item:="TV"
-        .Add key:="冷蔵庫", Item:="fridge"
-        .Add key:="炊飯器", Item:="rice cooker"
+        .Add key:="テレビ", item:="TV"
+        .Add key:="冷蔵庫", item:="fridge"
+        .Add key:="炊飯器", item:="rice cooker"
     End With
     'Assert
     Assert.IsTrue KzExistsKey(oCol, "炊飯器")

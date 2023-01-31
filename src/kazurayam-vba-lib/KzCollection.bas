@@ -32,7 +32,7 @@ Public Function KzExistsKey(objCol As Collection, strKey As String) As Boolean
     On Error Resume Next
      
     'Itemメソッドを実行
-    Call objCol.Item(strKey)
+    Call objCol.item(strKey)
          
     'エラー値がない場合：キー検索はヒット（戻り値：True）
     If Err.Number = 0 Then KzExistsKey = True
